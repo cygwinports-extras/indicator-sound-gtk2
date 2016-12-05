@@ -1,0 +1,44 @@
+--- origsrc/indicator-sound-12.10.0.1/src/sound-state-manager.c	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/sound-state-manager.c	2016-12-01 21:39:25.357170500 -0600
+@@ -183,15 +183,15 @@ sound_state_manager_show_notification (S
+       
+   if (state == ZERO_LEVEL) {
+     // Not available for all the themes
+-    icon = "notification-audio-volume-off";
++    icon = "audio-volume-low";
+   } else if (state == LOW_LEVEL) {
+-    icon = "notification-audio-volume-low";
++    icon = "audio-volume-low";
+   } else if (state == MEDIUM_LEVEL) {
+-    icon = "notification-audio-volume-medium";
++    icon = "audio-volume-medium";
+   } else if (state == HIGH_LEVEL) {
+-    icon = "notification-audio-volume-high";
++    icon = "audio-volume-high";
+   } else {
+-    icon = "notification-audio-volume-muted";
++    icon = "audio-volume-muted";
+   }
+ 
+   notify_notification_update(priv->notification, PACKAGE_NAME, NULL, icon);
+@@ -209,13 +209,13 @@ sound_state_manager_prepare_state_image_
+   SoundStateManagerPrivate* priv = SOUND_STATE_MANAGER_GET_PRIVATE(self);
+   priv->volume_states = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
+   
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(MUTED), g_strdup("audio-volume-muted-panel"));
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(ZERO_LEVEL), g_strdup("audio-volume-low-zero-panel"));
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(LOW_LEVEL), g_strdup("audio-volume-low-panel"));
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(MEDIUM_LEVEL), g_strdup("audio-volume-medium-panel"));
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(HIGH_LEVEL), g_strdup("audio-volume-high-panel"));
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(BLOCKED), g_strdup("audio-volume-muted-blocking-panel"));
+-  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(UNAVAILABLE), g_strdup("audio-output-none-panel"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(MUTED), g_strdup("audio-volume-muted-symbolic"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(ZERO_LEVEL), g_strdup("audio-volume-low-symbolic"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(LOW_LEVEL), g_strdup("audio-volume-low-symbolic"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(MEDIUM_LEVEL), g_strdup("audio-volume-medium-symbolic"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(HIGH_LEVEL), g_strdup("audio-volume-high-symbolic"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(BLOCKED), g_strdup("audio-volume-muted-symbolic"));
++  g_hash_table_insert (priv->volume_states, GINT_TO_POINTER(UNAVAILABLE), g_strdup("audio-volume-muted-symbolic"));
+ }
+ 
+ /*

@@ -1,0 +1,11 @@
+--- origsrc/indicator-sound-12.10.0.1/src/Makefile.am	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/Makefile.am	2016-12-01 21:39:25.291889900 -0600
+@@ -35,7 +35,7 @@ libsoundmenu_la_CFLAGS = \
+ libsoundmenu_la_LIBADD = $(APPLET_LIBS) -lm
+ libsoundmenu_la_LDFLAGS = \ 
+ 	$(COVERAGE_LDFLAGS) \
+-	-module -avoid-version
++	-module -avoid-version -no-undefined
+ 
+ 
+ checkxml: $(srcdir)/sound-service.xml

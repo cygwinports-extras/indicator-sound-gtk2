@@ -1,0 +1,97 @@
+--- origsrc/indicator-sound-12.10.0.1/data/Makefile.am	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/data/Makefile.am	2016-12-01 21:39:25.277889500 -0600
+@@ -5,9 +5,9 @@ gsettings_SCHEMAS = \
+ @GSETTINGS_RULES@
+ 
+ dbus_servicesdir = $(DBUSSERVICEDIR)
+-dbus_services_DATA = indicator-sound.service
++dbus_services_DATA = indicator-sound-gtk2.service
+ 
+-%.service: %.service.in
++%-gtk2.service: %.service.in
+ 	sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
+ 
+ EXTRA_DIST = \
+--- origsrc/indicator-sound-12.10.0.1/data/indicator-sound.service.in	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/data/indicator-sound.service.in	2016-12-01 21:39:25.285889700 -0600
+@@ -1,3 +1,3 @@
+ [D-BUS Service]
+-Name=com.canonical.indicator.sound
+-Exec=@libexecdir@/indicator-sound-service
++Name=com.canonical.indicator.sound-gtk2
++Exec=@libexecdir@/indicator-sound-gtk2-service
+--- origsrc/indicator-sound-12.10.0.1/src/Makefile.am	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/Makefile.am	2016-12-01 21:39:25.291889900 -0600
+@@ -1,4 +1,4 @@
+-libexec_PROGRAMS = indicator-sound-service
++libexec_PROGRAMS = indicator-sound-gtk2-service
+ 
+ ###################
+ # Indicator Stuff
+@@ -96,7 +96,7 @@ music_bridge_vala.stamp $(music_bridge_A
+ ###############################
+ # Sound Service C
+ ###############################
+-indicator_sound_service_SOURCES = \
++indicator_sound_gtk2_service_SOURCES = \
+   common-defs.h \
+   sound-service.h \
+   sound-service.c \
+@@ -120,13 +120,13 @@ indicator_sound_service_SOURCES = \
+   sound-service-marshal.h \
+   $(music_bridge_VALASOURCES:.vala=.c)
+ 
+-indicator_sound_service_CFLAGS = $(PULSEAUDIO_CFLAGS) \
++indicator_sound_gtk2_service_CFLAGS = $(PULSEAUDIO_CFLAGS) \
+ 	$(SOUNDSERVICE_CFLAGS) \
+ 	$(GCONF_CFLAGS) \
+ 	$(COVERAGE_CFLAGS) \
+ 	-DLIBEXECDIR=\"$(libexecdir)\" -Wall
+-indicator_sound_service_LDADD = $(PULSEAUDIO_LIBS) $(SOUNDSERVICE_LIBS) $(GCONF_LIBS)
+-indicator_sound_service_LDFLAGS = $(COVERAGE_LDFLAGS)
++indicator_sound_gtk2_service_LDADD = $(PULSEAUDIO_LIBS) $(SOUNDSERVICE_LIBS) $(GCONF_LIBS)
++indicator_sound_gtk2_service_LDFLAGS = $(COVERAGE_LDFLAGS)
+ 
+ #########################
+ # Service xml compilation
+--- origsrc/indicator-sound-12.10.0.1/src/dbus-shared-names.h	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/dbus-shared-names.h	2016-12-01 21:39:25.295890600 -0600
+@@ -25,7 +25,7 @@ with this program.  If not, see <http://
+ #ifndef __DBUS_SHARED_NAMES_H__
+ #define __DBUS_SHARED_NAMES_H__
+ 
+-#define INDICATOR_SOUND_DBUS_NAME  "com.canonical.indicator.sound"
++#define INDICATOR_SOUND_DBUS_NAME  "com.canonical.indicator.sound-gtk2"
+ #define INDICATOR_SOUND_MENU_DBUS_OBJECT_PATH "/com/canonical/indicator/sound/menu"
+ #define INDICATOR_SOUND_SERVICE_DBUS_OBJECT_PATH "/com/canonical/indicator/sound/service"
+ #define INDICATOR_SOUND_DBUS_INTERFACE "com.canonical.indicator.sound"
+--- origsrc/indicator-sound-12.10.0.1/src/gen-sound-service.xml.c	2012-09-09 07:15:10.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/gen-sound-service.xml.c	2016-12-01 21:39:25.300890100 -0600
+@@ -1,6 +1,6 @@
+ const char * _sound_service = 
+ "<!DOCTYPE node PUBLIC \"-//freedesktop//DTD D-BUS Object Introspection 1.0//EN\" \"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd\">\n"
+-"<node name=\"/com/canonical/indicator/sound\">\n"
++"<node name=\"/com/canonical/indicator/sound-gtk2\">\n"
+ "  <interface name=\"com.canonical.indicator.sound\">\n"
+ "    <method name = \"BlacklistMediaPlayer\">\n"
+ "        <annotation name=\"org.freedesktop.DBus.GLib.Async\" value=\"true\"/>\n"
+--- origsrc/indicator-sound-12.10.0.1/src/pulseaudio-mgr.c	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/pulseaudio-mgr.c	2016-12-01 21:39:25.319891400 -0600
+@@ -137,7 +137,7 @@ reconnect_to_pulse (gpointer user_data)
+                     "Indicator Sound");
+   pa_proplist_sets (proplist,
+                     PA_PROP_APPLICATION_ID,
+-                    "com.canonical.indicator.sound");
++                    "com.canonical.indicator.sound-gtk2");
+   pa_proplist_sets (proplist,
+                     PA_PROP_APPLICATION_ICON_NAME,
+                     "multimedia-volume-control");
+--- origsrc/indicator-sound-12.10.0.1/src/sound-service.xml	2012-08-24 12:55:16.000000000 -0500
++++ src/indicator-sound-12.10.0.1/src/sound-service.xml	2016-12-01 21:39:25.347662000 -0600
+@@ -1,5 +1,5 @@
+ <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+-<node name="/com/canonical/indicator/sound">
++<node name="/com/canonical/indicator/sound_gtk2">
+   <interface name="com.canonical.indicator.sound">
+     <method name = "BlacklistMediaPlayer">
+         <annotation name="org.freedesktop.DBus.GLib.Async" value="true"/>

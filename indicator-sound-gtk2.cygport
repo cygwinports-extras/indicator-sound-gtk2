@@ -1,0 +1,28 @@
+inherit gnome2
+
+NAME="indicator-sound-gtk2"
+VERSION=12.10.0.1
+RELEASE=1
+CATEGORY="X11"
+SUMMARY="Indicator sound applet"
+DESCRIPTION="A sound menu applet for the Ayatana indicators system"
+HOMEPAGE="https://launchpad.net/indicators-gtk2"
+SRC_URI="${HOMEPAGE}/${NAME}/i-s-${VERSION}/+download/${NAME%-gtk2}-${VERSION}.tar.gz"
+SRC_DIR="${NAME%-gtk2}-${VERSION}"
+PATCH_URI="
+	12.10.0.1-gtk2-collisions.patch
+	12.10.0.1-icons.patch
+	12.10.0.1-no-undefined.patch
+	12.10.0.1-pavucontrol.patch
+"
+
+REQUIRES="indicator-sound-common"
+
+# this hasn't been updated in far too long
+CFLAGS+=" -Wno-error=deprecated-declarations"
+
+src_install() {
+	cd ${B}
+	# do not conflict with identical files from gtk3 indicator-sound
+	cyginstall gsettings_SCHEMAS= icons_DATA=
+}
